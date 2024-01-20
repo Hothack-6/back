@@ -29,8 +29,11 @@ const concertApi = {
       user_id: ticketInfo.user_id, 
       concert_id: ticketInfo.concert_id
     })
+    
+    console.log(newTicket);
 
-    return newTicket
+    return newTicket;
+
     // console.log("purchaseTicket", _user_id, _concert_id);
 
     // Send Sendgrid email to user
@@ -44,7 +47,6 @@ const concertApi = {
     //       ? UserStatus.NotOnboarded
     //       : UserStatus.Active,
     // });
-    return {};
 
     // return newUser;
   },

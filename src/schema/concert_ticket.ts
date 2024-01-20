@@ -23,6 +23,6 @@ const concertTicketSchema = `
         createConcertTicket(ticket: CreateTicketInput): ConcertTicket
         updateConcertTicket(ticket: UpdateTicketInput): ConcertTicket
     }
+`;
 
-`
 export default concertTicketSchema
