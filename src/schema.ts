@@ -1,14 +1,16 @@
 import {
   makeExecutableSchema,
   addResolveFunctionsToSchema,
-} from 'apollo-server-express';
-import { rootResolvers } from './resolvers';
+} from "apollo-server-express";
+import { rootResolvers } from "./resolvers";
 
 // Import modular schemas
-import userSchema from './schema/user';
+import userSchema from "./schema/user";
+import concertSchema from "./schema/concert";
 
 // Import modular resolvers
-import userResolvers from './resolvers/user';
+import userResolvers from "./resolvers/user";
+import concertResolvers from "./resolvers/concert";
 
 const rootTypeDefs = `
   type RootSchema {
@@ -24,20 +26,14 @@ const rootTypeDefs = `
   scalar JSON
 `;
 
-const typeDefs = [
-  rootTypeDefs,
-  userSchema,
-];
-
-const resolvers = [
-  rootResolvers,
-  userResolvers,
-];
+const typeDefs = [rootTypeDefs, userSchema, concertSchema];
+const resolvers = [rootResolvers, userResolvers, concertResolvers];
 
 const schema = makeExecutableSchema({
   typeDefs,
 });
 
 addResolveFunctionsToSchema({ schema, resolvers: userResolvers });
+addResolveFunctionsToSchema({ schema, resolvers: concertResolvers });
 
 export { schema, typeDefs, resolvers };

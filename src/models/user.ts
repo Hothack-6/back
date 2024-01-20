@@ -1,8 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema } from "mongoose";
 
-import {
-  User as UserSchemaType,
-} from '../generated/graphql';
+import { User as UserSchemaType } from "../generated/graphql";
 
 const UserSchema = new Schema<UserSchemaType>(
   {
@@ -11,7 +9,7 @@ const UserSchema = new Schema<UserSchemaType>(
       required: true,
     },
   },
-  { collection: 'user' },
+  { collection: "user" }
 );
 
-export const User = mongoose.model<UserSchemaType>('User', UserSchema);
+export const User = mongoose.model<UserSchemaType>("User", UserSchema);
