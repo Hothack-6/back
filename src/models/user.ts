@@ -8,8 +8,23 @@ const UserSchema = new Schema<UserSchemaType>(
       type: String,
       required: true,
     },
+    wallet_address: {
+      type: String,
+    },
+    first_name: {
+      type: String,
+    },
+    last_name: {
+      type: String,
+    },
+    bio: {
+      type: String,
+    },
+    traits: {
+      type: [String],
+    },
   },
-  { collection: "user" }
+  { collection: "users" }
 );
 
 export const User = mongoose.model<UserSchemaType>("User", UserSchema);

@@ -16,7 +16,8 @@ const usersApi = {
   createUser: async (user: CreateUserInput) => {
     const newUser = await User.create({
       email: user.email,
-      password: await bcrypt.hash(user.password, 10),
+      first_name: user.first_name,
+      last_name: user.last_name
     });
 
     return newUser;
@@ -29,26 +30,26 @@ const usersApi = {
     );
     return updatedUser;
   },
-  login: async (email: string, password: string) => {
-    const user: UserModelType | null = await User.findOne({
-      email,
-      status: UserStatus.Active,
-    });
-    if (!user) {
-      throw new ApolloError("Invalid email or password");
-    }
+  // login: async (email: string, password: string) => {
+  //   const user: UserModelType | null = await User.findOne({
+  //     email,
+  //     status: UserStatus.Active,
+  //   });
+  //   if (!user) {
+  //     throw new ApolloError("Invalid email or password");
+  //   }
 
-    if (user.status !== UserStatus.Active) {
-      throw new ApolloError("This account has been deactivated");
-    }
+  //   if (user.status !== UserStatus.Active) {
+  //     throw new ApolloError("This account has been deactivated");
+  //   }
 
-    const matchedPassword = await bcrypt.compare(password, user.password || "");
-    if (!matchedPassword) {
-      throw new ApolloError("Invalid email or password");
-    }
+  //   const matchedPassword = await bcrypt.compare(password, user.password || "");
+  //   if (!matchedPassword) {
+  //     throw new ApolloError("Invalid email or password");
+  //   }
 
-    return user;
-  },
+  //   return user;
+  // },
 };
 
 export { usersApi };

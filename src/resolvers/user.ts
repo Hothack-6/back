@@ -25,9 +25,9 @@ const userResolvers: TypedResolvers = {
     updateUser: (root, { _id, user }) => {
       return usersApi.updateUser(_id, user);
     },
-    login: (root, { email, password }) => {
-      return usersApi.login(email, password);
-    },
+    // login: (root, { email, password }) => {
+    //   return usersApi.login(email, password);
+    // },
   },
 };
 

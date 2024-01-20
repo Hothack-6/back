@@ -60,7 +60,6 @@ export type Mutation = {
   changeStatus?: Maybe<RootSchema>;
   createUser?: Maybe<User>;
   updateUser?: Maybe<User>;
-  login?: Maybe<User>;
   purchaseTicket?: Maybe<Concert>;
 };
 
@@ -71,11 +70,6 @@ export type MutationCreateUserArgs = {
 export type MutationUpdateUserArgs = {
   _id: Scalars["ID"];
   user: UserInput;
-};
-
-export type MutationLoginArgs = {
-  email: Scalars["String"];
-  password: Scalars["String"];
 };
 
 export type MutationPurchaseTicketArgs = {
@@ -92,19 +86,26 @@ export type User = {
   __typename?: "User";
   _id: Scalars["ID"];
   email: Scalars["String"];
-  password?: Maybe<Scalars["String"]>;
-  status?: Maybe<UserStatus>;
+  wallet_address?: Maybe<Scalars["String"]>;
+  first_name?: Maybe<Scalars["String"]>;
+  last_name?: Maybe<Scalars["String"]>;
+  bio?: Maybe<Scalars["String"]>;
+  traits?: Maybe<Array<Maybe<Scalars["String"]>>>;
 };
 
 export type UserInput = {
   email?: InputMaybe<Scalars["String"]>;
-  password?: InputMaybe<Scalars["String"]>;
-  status?: InputMaybe<UserStatus>;
+  wallet_address?: InputMaybe<Scalars["String"]>;
+  first_name?: InputMaybe<Scalars["String"]>;
+  last_name?: InputMaybe<Scalars["String"]>;
+  bio?: InputMaybe<Scalars["String"]>;
+  traits?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>;
 };
 
 export type CreateUserInput = {
   email: Scalars["String"];
-  password: Scalars["String"];
+  first_name?: InputMaybe<Scalars["String"]>;
+  last_name?: InputMaybe<Scalars["String"]>;
 };
 
 export type Concert = {
@@ -339,12 +340,6 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateUserArgs, "_id" | "user">
   >;
-  login?: Resolver<
-    Maybe<ResolversTypes["User"]>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationLoginArgs, "email" | "password">
-  >;
   purchaseTicket?: Resolver<
     Maybe<ResolversTypes["Concert"]>,
     ParentType,
@@ -364,9 +359,24 @@ export type UserResolvers<
 > = {
   _id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  password?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  status?: Resolver<
-    Maybe<ResolversTypes["UserStatus"]>,
+  wallet_address?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  first_name?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  last_name?: Resolver<
+    Maybe<ResolversTypes["String"]>,
+    ParentType,
+    ContextType
+  >;
+  bio?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  traits?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["String"]>>>,
     ParentType,
     ContextType
   >;
