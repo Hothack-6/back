@@ -3,6 +3,7 @@ import _ from "lodash";
 import { CreateConcertInput, CreateTicketInput } from "../generated/graphql";
 import { Concert } from "../models/concert";
 import { ConcertTicket } from "../models/concert_ticket";
+import { SendGrid, TICKET_EMAIL_TEMPLATE } from "../lib/sendgrid";
 
 const { ObjectId } = Types;
 
@@ -30,6 +31,19 @@ const concertApi = {
       concert_id: ticketInfo.concert_id
     })
     
+    // Query on concerts
+    const concert = await Concert.findOne({ _id: ticketInfo.concert_id });
+
+    //console.log(concert);
+
+    SendGrid.sendMail('danielvantran09@gmail.com', {
+      Name: concert?.name,
+      Start: concert?.start,
+      End: concert?.end,
+      Description: concert?.description,
+      Artist: concert?.artist
+    }, TICKET_EMAIL_TEMPLATE)
+
     console.log(newTicket);
 
     return newTicket;
@@ -37,6 +51,7 @@ const concertApi = {
     // console.log("purchaseTicket", _user_id, _concert_id);
 
     // Send Sendgrid email to user
+
 
     // const newUser = await User.create({
     //   email: user.email,
@@ -49,6 +64,8 @@ const concertApi = {
     // });
 
     // return newUser;
+
+
   },
 };
 
