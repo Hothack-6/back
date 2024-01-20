@@ -7,19 +7,24 @@ const userSchema = `
   type User {
     _id: ID!
     email: String!
-    password: String
-    status: UserStatus
+    wallet_address: String
+    first_name: String
+    last_name: String
+    bio: String
+    traits: [String]
   }
 
   input UserInput {
     email: String
-    password: String
-    status: UserStatus
+    wallet_address: String
+    first_name: String
+    last_name: String
+    bio: String
+    traits: [String]
   }
 
   input CreateUserInput {
     email: String!
-    password: String!
   }
 
   extend type Query {

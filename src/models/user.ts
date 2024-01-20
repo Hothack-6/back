@@ -9,7 +9,7 @@ const UserSchema = new Schema<UserSchemaType>(
       required: true,
     },
   },
-  { collection: "user" }
+  { collection: "users" }
 );
 
 export const User = mongoose.model<UserSchemaType>("User", UserSchema);
