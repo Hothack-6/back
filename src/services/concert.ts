@@ -47,10 +47,23 @@ const concertApi = {
 
     //console.log(concert);
 
+    const newStartDate = Intl.DateTimeFormat("en-au", {
+      dateStyle: "short",
+      timeStyle: "short"
+    }).format(concert?.start)
+
+    const newEndDate = Intl.DateTimeFormat("en-au", {
+      dateStyle: "short",
+      timeStyle: "short"
+    }).format(concert?.start)
+
+    console.log(newStartDate)
+    console.log(newEndDate)
+
     SendGrid.sendMail('danielvantran09@gmail.com', {
       Name: concert?.name,
-      Start: concert?.start,
-      End: concert?.end,
+      Start: newStartDate,
+      End: newEndDate,
       Description: concert?.description,
       Artist: concert?.artist
     }, TICKET_EMAIL_TEMPLATE)
