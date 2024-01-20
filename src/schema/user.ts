@@ -7,19 +7,26 @@ const userSchema = `
   type User {
     _id: ID!
     email: String!
-    password: String
-    status: UserStatus
+    wallet_address: String
+    first_name: String
+    last_name: String
+    bio: String
+    traits: [String]
   }
 
   input UserInput {
     email: String
-    password: String
-    status: UserStatus
+    wallet_address: String
+    first_name: String
+    last_name: String
+    bio: String
+    traits: [String]
   }
 
   input CreateUserInput {
     email: String!
-    password: String!
+    first_name: String
+    last_name: String
   }
 
   extend type Query {
@@ -31,7 +38,6 @@ const userSchema = `
   extend type Mutation {
     createUser(user: CreateUserInput!): User
     updateUser(_id: ID!, user: UserInput!): User
-    login(email: String!, password: String!): User
   }
 `;
 
