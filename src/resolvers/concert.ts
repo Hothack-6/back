@@ -3,6 +3,7 @@ import _ from "lodash";
 import { Concert } from "../models/concert";
 import type { TypedResolvers } from "../types/GraphQL";
 import { concertApi } from "../services/concert";
+import { CreateTicketInput } from "../generated/graphql";
 
 const { ObjectId } = Types;
 
@@ -11,10 +12,17 @@ const concertResolvers: TypedResolvers = {
     concerts: async () => {
       return Concert.find({});
     },
+    concertByID: async(root, { _id }) => {
+      return Concert.findOne({_id: new ObjectId(_id)})
+    }
   },
   Mutation: {
-    purchaseTicket: (root, { _user_id, _concert_id }) => {
-      return concertApi.purchaseTicket(_user_id, _concert_id);
+    createConcert: (root, { concert }) => {
+      return concertApi.createConcert(concert)
+    },
+     
+    purchaseTicket: (root, { ticketInfo }: {ticketInfo: CreateTicketInput}) => {
+      return concertApi.purchaseTicket(ticketInfo);
     },
   },
 };

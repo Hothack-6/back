@@ -41,6 +41,8 @@ export type Query = {
   userByID?: Maybe<User>;
   userByEmail?: Maybe<User>;
   concerts?: Maybe<Array<Maybe<Concert>>>;
+  concertByID?: Maybe<Concert>;
+  tickets?: Maybe<Array<Maybe<ConcertTicket>>>;
 };
 
 export type QueryAppVersionArgs = {
@@ -55,12 +57,19 @@ export type QueryUserByEmailArgs = {
   email: Scalars["String"];
 };
 
+export type QueryConcertByIdArgs = {
+  _id: Scalars["ID"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   changeStatus?: Maybe<RootSchema>;
   createUser?: Maybe<User>;
   updateUser?: Maybe<User>;
-  purchaseTicket?: Maybe<Concert>;
+  createConcert?: Maybe<Concert>;
+  purchaseTicket?: Maybe<ConcertTicket>;
+  createConcertTicket?: Maybe<ConcertTicket>;
+  updateConcertTicket?: Maybe<ConcertTicket>;
 };
 
 export type MutationCreateUserArgs = {
@@ -72,9 +81,20 @@ export type MutationUpdateUserArgs = {
   user: UserInput;
 };
 
+export type MutationCreateConcertArgs = {
+  concert?: InputMaybe<CreateConcertInput>;
+};
+
 export type MutationPurchaseTicketArgs = {
-  _user_id: Scalars["ID"];
-  _concert_id: Scalars["ID"];
+  ticketInfo?: InputMaybe<CreateTicketInput>;
+};
+
+export type MutationCreateConcertTicketArgs = {
+  ticket?: InputMaybe<CreateTicketInput>;
+};
+
+export type MutationUpdateConcertTicketArgs = {
+  ticket?: InputMaybe<UpdateTicketInput>;
 };
 
 export enum UserStatus {
@@ -112,6 +132,55 @@ export type Concert = {
   __typename?: "Concert";
   _id: Scalars["ID"];
   name: Scalars["String"];
+  start: Scalars["String"];
+  end: Scalars["String"];
+  artist: Scalars["String"];
+  description: Scalars["String"];
+  price: Scalars["Float"];
+  base_image: Scalars["String"];
+  available_tickets: Scalars["Int"];
+  token_id: Scalars["Int"];
+};
+
+export type CreateConcertInput = {
+  name: Scalars["String"];
+  start: Scalars["String"];
+  end: Scalars["String"];
+  artist: Scalars["String"];
+  description: Scalars["String"];
+  price: Scalars["Float"];
+  base_image: Scalars["String"];
+  available_tickets: Scalars["Int"];
+  token_id: Scalars["Int"];
+};
+
+export type UpdateConcertInput = {
+  name?: InputMaybe<Scalars["String"]>;
+  start?: InputMaybe<Scalars["String"]>;
+  end?: InputMaybe<Scalars["String"]>;
+  artist?: InputMaybe<Scalars["String"]>;
+  description?: InputMaybe<Scalars["String"]>;
+  price?: InputMaybe<Scalars["Float"]>;
+  base_image?: InputMaybe<Scalars["String"]>;
+  available_tickets?: InputMaybe<Scalars["Int"]>;
+  token_id?: InputMaybe<Scalars["Int"]>;
+};
+
+export type ConcertTicket = {
+  __typename?: "ConcertTicket";
+  _id: Scalars["ID"];
+  user_id: Scalars["ID"];
+  concert_id: Scalars["ID"];
+  attended?: Maybe<Scalars["Boolean"]>;
+};
+
+export type CreateTicketInput = {
+  user_id: Scalars["ID"];
+  concert_id: Scalars["ID"];
+};
+
+export type UpdateTicketInput = {
+  attended?: InputMaybe<Scalars["Boolean"]>;
 };
 
 export enum CacheControlScope {
@@ -238,9 +307,15 @@ export type ResolversTypes = {
   UserInput: UserInput;
   CreateUserInput: CreateUserInput;
   Concert: ResolverTypeWrapper<Concert>;
+  Float: ResolverTypeWrapper<Scalars["Float"]>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
+  CreateConcertInput: CreateConcertInput;
+  UpdateConcertInput: UpdateConcertInput;
+  ConcertTicket: ResolverTypeWrapper<ConcertTicket>;
+  CreateTicketInput: CreateTicketInput;
+  UpdateTicketInput: UpdateTicketInput;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars["Upload"]>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -256,8 +331,14 @@ export type ResolversParentTypes = {
   UserInput: UserInput;
   CreateUserInput: CreateUserInput;
   Concert: Concert;
-  Upload: Scalars["Upload"];
+  Float: Scalars["Float"];
   Int: Scalars["Int"];
+  CreateConcertInput: CreateConcertInput;
+  UpdateConcertInput: UpdateConcertInput;
+  ConcertTicket: ConcertTicket;
+  CreateTicketInput: CreateTicketInput;
+  UpdateTicketInput: UpdateTicketInput;
+  Upload: Scalars["Upload"];
 };
 
 export type CacheControlDirectiveArgs = {
@@ -317,6 +398,17 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
+  concertByID?: Resolver<
+    Maybe<ResolversTypes["Concert"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryConcertByIdArgs, "_id">
+  >;
+  tickets?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["ConcertTicket"]>>>,
+    ParentType,
+    ContextType
+  >;
 };
 
 export type MutationResolvers<
@@ -340,11 +432,29 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateUserArgs, "_id" | "user">
   >;
-  purchaseTicket?: Resolver<
+  createConcert?: Resolver<
     Maybe<ResolversTypes["Concert"]>,
     ParentType,
     ContextType,
-    RequireFields<MutationPurchaseTicketArgs, "_user_id" | "_concert_id">
+    Partial<MutationCreateConcertArgs>
+  >;
+  purchaseTicket?: Resolver<
+    Maybe<ResolversTypes["ConcertTicket"]>,
+    ParentType,
+    ContextType,
+    Partial<MutationPurchaseTicketArgs>
+  >;
+  createConcertTicket?: Resolver<
+    Maybe<ResolversTypes["ConcertTicket"]>,
+    ParentType,
+    ContextType,
+    Partial<MutationCreateConcertTicketArgs>
+  >;
+  updateConcertTicket?: Resolver<
+    Maybe<ResolversTypes["ConcertTicket"]>,
+    ParentType,
+    ContextType,
+    Partial<MutationUpdateConcertTicketArgs>
   >;
 };
 
@@ -389,6 +499,29 @@ export type ConcertResolvers<
 > = {
   _id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  start?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  end?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  artist?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  price?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  base_image?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  available_tickets?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  token_id?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ConcertTicketResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["ConcertTicket"] = ResolversParentTypes["ConcertTicket"]
+> = {
+  _id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  user_id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  concert_id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  attended?: Resolver<
+    Maybe<ResolversTypes["Boolean"]>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -404,6 +537,7 @@ export type Resolvers<ContextType = any> = {
   JSON?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   Concert?: ConcertResolvers<ContextType>;
+  ConcertTicket?: ConcertTicketResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
 

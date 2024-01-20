@@ -11,6 +11,7 @@ import concertSchema from "./schema/concert";
 // Import modular resolvers
 import userResolvers from "./resolvers/user";
 import concertResolvers from "./resolvers/concert";
+import concertTicketSchema from "./schema/concert_ticket";
 
 const rootTypeDefs = `
   type RootSchema {
@@ -26,7 +27,7 @@ const rootTypeDefs = `
   scalar JSON
 `;
 
-const typeDefs = [rootTypeDefs, userSchema, concertSchema];
+const typeDefs = [rootTypeDefs, userSchema, concertSchema, concertTicketSchema];
 const resolvers = [rootResolvers, userResolvers, concertResolvers];
 
 const schema = makeExecutableSchema({
