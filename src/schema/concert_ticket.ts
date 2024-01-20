@@ -1,9 +1,9 @@
 const concertTicketSchema = `
     type ConcertTicket {
         _id: ID!
-        user_id: ID!
-        concert_id: ID!
-        attended: Boolean
+        user_id: ID
+        concert_id: ID
+        attended: Boolean!
     }
 
     input CreateTicketInput {
@@ -12,7 +12,9 @@ const concertTicketSchema = `
     }
 
     input UpdateTicketInput {
-        attended: Boolean
+        user_id: ID!
+        concert_id: ID!
+        attended: Boolean!
     }
 
     extend type Query {

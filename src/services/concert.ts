@@ -1,8 +1,13 @@
 import mongoose, { Types } from "mongoose";
 import _ from "lodash";
-import { CreateConcertInput, CreateTicketInput } from "../generated/graphql";
+import {
+  CreateConcertInput,
+  CreateTicketInput,
+  UpdateTicketInput,
+} from "../generated/graphql";
 import { Concert } from "../models/concert";
 import { ConcertTicket } from "../models/concert_ticket";
+import { ApolloError } from "apollo-server-express";
 
 const { ObjectId } = Types;
 
@@ -17,20 +22,24 @@ const concertApi = {
       price: concert.price,
       base_image: concert.base_image,
       available_tickets: concert.available_tickets,
-      token_id: concert.token_id
+      token_id: concert.token_id,
+    });
+
+    return newConcert;
+  },
+
+  purchaseTicket: async (ticketInfo: CreateTicketInput) => {
+    const  ticketAlreadyExists = await ConcertTicket.find({
+      $and: [{user_id: ticketInfo.user_id}, {concert_id: ticketInfo.concert_id}]
     })
 
-    return newConcert
-  },
-  
-  purchaseTicket: async (ticketInfo: CreateTicketInput) => {
+    if(ticketAlreadyExists.length) return new ApolloError("Ticket already exists")
+
     // Create concert tickets
     const newTicket = await ConcertTicket.create({
-      user_id: ticketInfo.user_id, 
-      concert_id: ticketInfo.concert_id
-    })
-    
-    console.log(newTicket);
+      user_id: ticketInfo.user_id,
+      concert_id: ticketInfo.concert_id,
+    });
 
     return newTicket;
 
@@ -49,6 +58,20 @@ const concertApi = {
     // });
 
     // return newUser;
+  },
+
+  updateAttendance: async (ticketInfo: UpdateTicketInput) => {
+    const updatedTicket = await ConcertTicket.findOneAndUpdate(
+      { concert_id: ticketInfo.concert_id, user_id: ticketInfo.user_id },
+      {
+        attended: ticketInfo.attended
+      }, {
+        upsert: true,
+        returnDocument: "after"
+      }
+    )
+
+    return updatedTicket;
   },
 };
 

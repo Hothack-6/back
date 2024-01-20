@@ -8,14 +8,8 @@ const ConcertSchema = new Schema<ConcertSchemaType>(
       type: String,
       required: true
     },
-    start: {
-      type: String,
-      required: true
-    },
-    end: {
-      type: String,
-      required: true
-    },
+    start: Schema.Types.Date,
+    end: Schema.Types.Date,
     artist: {
       type: String,
       required: true

@@ -3,7 +3,7 @@ import _ from "lodash";
 import { Concert } from "../models/concert";
 import type { TypedResolvers } from "../types/GraphQL";
 import { concertApi } from "../services/concert";
-import { CreateTicketInput } from "../generated/graphql";
+import { CreateTicketInput, UpdateTicketInput } from "../generated/graphql";
 
 const { ObjectId } = Types;
 
@@ -24,6 +24,10 @@ const concertResolvers: TypedResolvers = {
     purchaseTicket: (root, { ticketInfo }: {ticketInfo: CreateTicketInput}) => {
       return concertApi.purchaseTicket(ticketInfo);
     },
+
+    updateAttendance:  (root, { ticketInfo}: {ticketInfo: UpdateTicketInput}) => {
+      return concertApi.updateAttendance(ticketInfo)
+    }
   },
 };
 

@@ -4,16 +4,12 @@ import { ConcertTicket as ConcertTicketSchemaType } from "../generated/graphql";
 
 const ConcertTicketSchema = new Schema<ConcertTicketSchemaType>(
   {
-    user_id: {
-      type: String,
-      required: true,
-    },
-    concert_id: {
-      type: String,
-      required: true,
-    },
+    user_id: Schema.Types.ObjectId,
+    concert_id: Schema.Types.ObjectId,
     attended: {
       type: Boolean,
+      required: true,
+      default: false,
     },
   },
   { collection: "concert_tickets" }

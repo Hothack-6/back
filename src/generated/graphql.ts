@@ -68,6 +68,7 @@ export type Mutation = {
   updateUser?: Maybe<User>;
   createConcert?: Maybe<Concert>;
   purchaseTicket?: Maybe<ConcertTicket>;
+  updateAttendance?: Maybe<ConcertTicket>;
   createConcertTicket?: Maybe<ConcertTicket>;
   updateConcertTicket?: Maybe<ConcertTicket>;
 };
@@ -87,6 +88,10 @@ export type MutationCreateConcertArgs = {
 
 export type MutationPurchaseTicketArgs = {
   ticketInfo?: InputMaybe<CreateTicketInput>;
+};
+
+export type MutationUpdateAttendanceArgs = {
+  ticketInfo?: InputMaybe<UpdateTicketInput>;
 };
 
 export type MutationCreateConcertTicketArgs = {
@@ -132,8 +137,8 @@ export type Concert = {
   __typename?: "Concert";
   _id: Scalars["ID"];
   name: Scalars["String"];
-  start: Scalars["String"];
-  end: Scalars["String"];
+  start?: Maybe<Scalars["Float"]>;
+  end?: Maybe<Scalars["Float"]>;
   artist: Scalars["String"];
   description: Scalars["String"];
   price: Scalars["Float"];
@@ -144,8 +149,8 @@ export type Concert = {
 
 export type CreateConcertInput = {
   name: Scalars["String"];
-  start: Scalars["String"];
-  end: Scalars["String"];
+  start?: InputMaybe<Scalars["Float"]>;
+  end?: InputMaybe<Scalars["Float"]>;
   artist: Scalars["String"];
   description: Scalars["String"];
   price: Scalars["Float"];
@@ -156,8 +161,8 @@ export type CreateConcertInput = {
 
 export type UpdateConcertInput = {
   name?: InputMaybe<Scalars["String"]>;
-  start?: InputMaybe<Scalars["String"]>;
-  end?: InputMaybe<Scalars["String"]>;
+  start?: InputMaybe<Scalars["Float"]>;
+  end?: InputMaybe<Scalars["Float"]>;
   artist?: InputMaybe<Scalars["String"]>;
   description?: InputMaybe<Scalars["String"]>;
   price?: InputMaybe<Scalars["Float"]>;
@@ -169,9 +174,9 @@ export type UpdateConcertInput = {
 export type ConcertTicket = {
   __typename?: "ConcertTicket";
   _id: Scalars["ID"];
-  user_id: Scalars["ID"];
-  concert_id: Scalars["ID"];
-  attended?: Maybe<Scalars["Boolean"]>;
+  user_id?: Maybe<Scalars["ID"]>;
+  concert_id?: Maybe<Scalars["ID"]>;
+  attended: Scalars["Boolean"];
 };
 
 export type CreateTicketInput = {
@@ -180,7 +185,9 @@ export type CreateTicketInput = {
 };
 
 export type UpdateTicketInput = {
-  attended?: InputMaybe<Scalars["Boolean"]>;
+  user_id: Scalars["ID"];
+  concert_id: Scalars["ID"];
+  attended: Scalars["Boolean"];
 };
 
 export enum CacheControlScope {
@@ -444,6 +451,12 @@ export type MutationResolvers<
     ContextType,
     Partial<MutationPurchaseTicketArgs>
   >;
+  updateAttendance?: Resolver<
+    Maybe<ResolversTypes["ConcertTicket"]>,
+    ParentType,
+    ContextType,
+    Partial<MutationUpdateAttendanceArgs>
+  >;
   createConcertTicket?: Resolver<
     Maybe<ResolversTypes["ConcertTicket"]>,
     ParentType,
@@ -499,8 +512,8 @@ export type ConcertResolvers<
 > = {
   _id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  start?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  end?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  start?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
+  end?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
   artist?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   description?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   price?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
@@ -515,13 +528,9 @@ export type ConcertTicketResolvers<
   ParentType extends ResolversParentTypes["ConcertTicket"] = ResolversParentTypes["ConcertTicket"]
 > = {
   _id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  user_id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  concert_id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  attended?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
-    ParentType,
-    ContextType
-  >;
+  user_id?: Resolver<Maybe<ResolversTypes["ID"]>, ParentType, ContextType>;
+  concert_id?: Resolver<Maybe<ResolversTypes["ID"]>, ParentType, ContextType>;
+  attended?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

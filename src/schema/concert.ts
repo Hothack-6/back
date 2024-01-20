@@ -2,8 +2,8 @@ const concertSchema = `
   type Concert {
     _id: ID!
     name: String!
-    start: String!
-    end: String!
+    start: Float
+    end: Float
     artist: String!
     description: String!
     price: Float!
@@ -14,8 +14,8 @@ const concertSchema = `
 
   input CreateConcertInput {
     name: String!
-    start: String!
-    end: String!
+    start: Float
+    end: Float
     artist: String!
     description: String!
     price: Float!
@@ -26,8 +26,8 @@ const concertSchema = `
 
   input UpdateConcertInput {
     name: String
-    start: String
-    end: String
+    start: Float
+    end: Float
     artist: String
     description: String
     price: Float
@@ -44,6 +44,7 @@ const concertSchema = `
   extend type Mutation {
     createConcert(concert: CreateConcertInput): Concert
     purchaseTicket(ticketInfo: CreateTicketInput): ConcertTicket
+    updateAttendance(ticketInfo: UpdateTicketInput): ConcertTicket
   }
 `;
 
