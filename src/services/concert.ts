@@ -83,6 +83,7 @@ const concertApi = {
     SendGrid.sendMail(
       `${user?.email}`,
       {
+        Subject: concert?.name + 'Event Tickets',
         Name: concert?.name,
         Start: newStartDate,
         End: newEndDate,
