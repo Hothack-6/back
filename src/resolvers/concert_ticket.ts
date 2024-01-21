@@ -19,9 +19,6 @@ const concertTicketResolver: TypedResolvers = {
     redeemQRCode: (root, { concert_ID }) => {
       return concertTicketApi.redeemQRCode(concert_ID);
     },
-    // login: (root, { email, password }) => {
-    //   return usersApi.login(email, password);
-    // },
   },
 };
 
