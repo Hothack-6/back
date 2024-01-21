@@ -18,12 +18,12 @@ const concertTicketSchema = `
     }
 
     extend type Query {
-        tickets: [ConcertTicket]
+        concertTickets: [ConcertTicket]
+        concertTicketsByID(_id: ID!): ConcertTicket
     }
 
     extend type Mutation {
-        createConcertTicket(ticket: CreateTicketInput): ConcertTicket
-        updateConcertTicket(ticket: UpdateTicketInput): ConcertTicket
+        redeemQRCode(concert_ID: ID!): ConcertTicket
     }
 `;
 

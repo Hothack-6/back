@@ -65,7 +65,8 @@ const concertApi = {
       Start: newStartDate,
       End: newEndDate,
       Description: concert?.description,
-      Artist: concert?.artist
+      Artist: concert?.artist,
+      QRCODE: concert?.base_image,
     }, TICKET_EMAIL_TEMPLATE)
 
     console.log(newTicket);
