@@ -14,10 +14,14 @@ const { ObjectId } = Types;
 
 const usersApi = {
   createUser: async (user: CreateUserInput) => {
+    // check if user exists
+    const userExists = await User.findOne({ email: user.email });
+    if (userExists) return userExists;
+
     const newUser = await User.create({
       email: user.email,
       first_name: user.first_name,
-      last_name: user.last_name
+      last_name: user.last_name,
     });
 
     return newUser;
