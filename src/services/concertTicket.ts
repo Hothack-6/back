@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import _ from "lodash";
 import { ConcertTicket } from "../models/concert_ticket";
 import { SendGrid, NFTMINTING_EMAIL_TEMPLATE } from "../lib/sendgrid";
+import { User } from "../models/user";
 
 const { ObjectId } = Types;
 
@@ -16,9 +17,12 @@ const concertTicketApi = {
             returnDocument: "after"
         });
 
+        // Query the users
+        const user = await User.findOne({_id: updateAttendance.user_id})
+
         const baseURL = `http://localhost:3000/mint/${_id}`;
 
-        SendGrid.sendMail('danielvantran09@gmail.com', {
+        SendGrid.sendMail(`${user?.email}`, {
             NFT: baseURL,
           }, NFTMINTING_EMAIL_TEMPLATE)    
 
