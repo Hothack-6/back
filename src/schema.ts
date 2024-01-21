@@ -7,11 +7,12 @@ import { rootResolvers } from "./resolvers";
 // Import modular schemas
 import userSchema from "./schema/user";
 import concertSchema from "./schema/concert";
+import concertTicketSchema from "./schema/concert_ticket";
 
 // Import modular resolvers
 import userResolvers from "./resolvers/user";
 import concertResolvers from "./resolvers/concert";
-import concertTicketSchema from "./schema/concert_ticket";
+import concertTicketResolver from "./resolvers/concert_ticket";
 
 const rootTypeDefs = `
   type RootSchema {
@@ -28,7 +29,7 @@ const rootTypeDefs = `
 `;
 
 const typeDefs = [rootTypeDefs, userSchema, concertSchema, concertTicketSchema];
-const resolvers = [rootResolvers, userResolvers, concertResolvers];
+const resolvers = [rootResolvers, userResolvers, concertResolvers, concertTicketResolver];
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -36,5 +37,6 @@ const schema = makeExecutableSchema({
 
 addResolveFunctionsToSchema({ schema, resolvers: userResolvers });
 addResolveFunctionsToSchema({ schema, resolvers: concertResolvers });
+addResolveFunctionsToSchema({ schema, resolvers: concertTicketResolver });
 
 export { schema, typeDefs, resolvers };
