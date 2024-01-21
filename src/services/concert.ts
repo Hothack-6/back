@@ -9,6 +9,7 @@ import { Concert } from "../models/concert";
 import { ConcertTicket } from "../models/concert_ticket";
 import { SendGrid, TICKET_EMAIL_TEMPLATE } from "../lib/sendgrid";
 import { ApolloError } from "apollo-server-express";
+import { User } from "../models/user";
 
 const { ObjectId } = Types;
 
@@ -42,10 +43,10 @@ const concertApi = {
       concert_id: ticketInfo.concert_id
     })
     
+
     // Query on concerts
     const concert = await Concert.findOne({ _id: ticketInfo.concert_id });
-
-    //console.log(concert);
+    const user = await User.findOne({ _id: ticketInfo.user_id})
 
     const newStartDate = Intl.DateTimeFormat("en-au", {
       dateStyle: "short",
@@ -56,19 +57,36 @@ const concertApi = {
       dateStyle: "short",
       timeStyle: "short"
     }).format(concert?.start)
+    
+    const data = await fetch("https://hovercode.com/api/v2/hovercode/create/", {
+    method: "POST",
+    headers: {
+      Authorization: `Token ${process.env.HOVERCODE_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "workspace": process.env.HOVERCODE_ORG_ID,
+      
+      "qr_data": `${process.env.FRONT_END_URL}/concert-tickets/${newTicket._id}`,
+      "primary_color": "#1DA1F2",
+      "generate_png": true,
+    }),
+  });
 
-    console.log(newStartDate)
-    console.log(newEndDate)
+  const finalQR = await data.json()
+  const qr_png_url = finalQR.png
+  // return
 
-    SendGrid.sendMail('danielvantran09@gmail.com', {
+    SendGrid.sendMail(`${user?.email}`, {
       Name: concert?.name,
       Start: newStartDate,
       End: newEndDate,
       Description: concert?.description,
-      Artist: concert?.artist
+      Artist: concert?.artist,
+      QRCODE: qr_png_url
     }, TICKET_EMAIL_TEMPLATE)
 
-    console.log(newTicket);
+    // console.log(newTicket);
 
     return newTicket;
 
