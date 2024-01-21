@@ -12,7 +12,7 @@ const concertTicketResolver: TypedResolvers = {
       return ConcertTicket.find({});
     },
     concertTicketsByID: async (root, { _id }) => {
-      return ConcertTicket.findOne({id: new ObjectId(_id) });
+      return ConcertTicket.findOne({_id: new ObjectId(_id) });
     },
   },
   Mutation: {
