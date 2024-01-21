@@ -69,7 +69,6 @@ const concertApi = {
       },
       body: JSON.stringify({
         workspace: process.env.HOVERCODE_ORG_ID,
-
         qr_data: `${process.env.FRONT_END_URL}/concert-tickets/${newTicket._id}`,
         primary_color: "#1DA1F2",
         generate_png: true,
