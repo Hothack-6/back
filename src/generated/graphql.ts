@@ -42,7 +42,8 @@ export type Query = {
   userByEmail?: Maybe<User>;
   concerts?: Maybe<Array<Maybe<Concert>>>;
   concertByID?: Maybe<Concert>;
-  tickets?: Maybe<Array<Maybe<ConcertTicket>>>;
+  concertTickets?: Maybe<Array<Maybe<ConcertTicket>>>;
+  concertTicketsByID?: Maybe<ConcertTicket>;
 };
 
 export type QueryAppVersionArgs = {
@@ -61,6 +62,10 @@ export type QueryConcertByIdArgs = {
   _id: Scalars["ID"];
 };
 
+export type QueryConcertTicketsByIdArgs = {
+  _id: Scalars["ID"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   changeStatus?: Maybe<RootSchema>;
@@ -69,8 +74,7 @@ export type Mutation = {
   createConcert?: Maybe<Concert>;
   purchaseTicket?: Maybe<ConcertTicket>;
   updateAttendance?: Maybe<ConcertTicket>;
-  createConcertTicket?: Maybe<ConcertTicket>;
-  updateConcertTicket?: Maybe<ConcertTicket>;
+  redeemQRCode?: Maybe<ConcertTicket>;
 };
 
 export type MutationCreateUserArgs = {
@@ -94,12 +98,8 @@ export type MutationUpdateAttendanceArgs = {
   ticketInfo?: InputMaybe<UpdateTicketInput>;
 };
 
-export type MutationCreateConcertTicketArgs = {
-  ticket?: InputMaybe<CreateTicketInput>;
-};
-
-export type MutationUpdateConcertTicketArgs = {
-  ticket?: InputMaybe<UpdateTicketInput>;
+export type MutationRedeemQrCodeArgs = {
+  concert_ID: Scalars["ID"];
 };
 
 export enum UserStatus {
@@ -177,6 +177,8 @@ export type ConcertTicket = {
   user_id?: Maybe<Scalars["ID"]>;
   concert_id?: Maybe<Scalars["ID"]>;
   attended: Scalars["Boolean"];
+  User?: Maybe<User>;
+  Concert?: Maybe<Concert>;
 };
 
 export type CreateTicketInput = {
@@ -411,10 +413,16 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryConcertByIdArgs, "_id">
   >;
-  tickets?: Resolver<
+  concertTickets?: Resolver<
     Maybe<Array<Maybe<ResolversTypes["ConcertTicket"]>>>,
     ParentType,
     ContextType
+  >;
+  concertTicketsByID?: Resolver<
+    Maybe<ResolversTypes["ConcertTicket"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryConcertTicketsByIdArgs, "_id">
   >;
 };
 
@@ -457,17 +465,11 @@ export type MutationResolvers<
     ContextType,
     Partial<MutationUpdateAttendanceArgs>
   >;
-  createConcertTicket?: Resolver<
+  redeemQRCode?: Resolver<
     Maybe<ResolversTypes["ConcertTicket"]>,
     ParentType,
     ContextType,
-    Partial<MutationCreateConcertTicketArgs>
-  >;
-  updateConcertTicket?: Resolver<
-    Maybe<ResolversTypes["ConcertTicket"]>,
-    ParentType,
-    ContextType,
-    Partial<MutationUpdateConcertTicketArgs>
+    RequireFields<MutationRedeemQrCodeArgs, "concert_ID">
   >;
 };
 
@@ -531,6 +533,8 @@ export type ConcertTicketResolvers<
   user_id?: Resolver<Maybe<ResolversTypes["ID"]>, ParentType, ContextType>;
   concert_id?: Resolver<Maybe<ResolversTypes["ID"]>, ParentType, ContextType>;
   attended?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  User?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
+  Concert?: Resolver<Maybe<ResolversTypes["Concert"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
