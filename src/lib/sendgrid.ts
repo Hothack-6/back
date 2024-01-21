@@ -18,7 +18,7 @@ export const EMAILS_TEMPLATES: EMAILS_TEMPLATES = {
 export const SendGrid = {
   sendMail: (to: string, subs: any, templateId: string) => {
     const msg = {
-      from: "GlowApp <contact@glowapp.com.au>",
+      from: "HotHack <contact@glowapp.com.au>",
       to,
       templateId,
       dynamic_template_data: subs,
