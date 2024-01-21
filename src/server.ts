@@ -35,10 +35,10 @@ app.use("/graphql", (req, res, next) => {
 });
 
 // CORS configuration
-const corsOptions = {
-  origin: (origin: any, callback: any) => callback(null, true),
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: (origin: any, callback: any) => callback(null, true),
+//   credentials: true,
+// };
 
 // Creates the Apollo Server
 const server = new ApolloServer({
@@ -60,7 +60,7 @@ export async function startApp() {
   await Database.connect();
 
   server.applyMiddleware({
-    cors: corsOptions,
+    // cors: corsOptions,
     app,
     bodyParserConfig: {
       limit: "10mb",
