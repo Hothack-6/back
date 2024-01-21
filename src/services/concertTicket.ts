@@ -16,18 +16,10 @@ const concertTicketApi = {
             returnDocument: "after"
         });
 
-        const baseURL = "http://localhost:3000/mint/65ac76b8576fd9d698fd670b/";
-        const concertID = _id;
-
-        
-        
-        const nftURL = baseURL + concertID;
-
-        console.log(nftURL);
-
+        const baseURL = `http://localhost:3000/mint/${_id}`;
 
         SendGrid.sendMail('danielvantran09@gmail.com', {
-            NFT: nftURL,
+            NFT: baseURL,
           }, NFTMINTING_EMAIL_TEMPLATE)    
 
         return updateAttendance;
