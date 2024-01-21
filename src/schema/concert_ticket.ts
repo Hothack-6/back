@@ -4,6 +4,8 @@ const concertTicketSchema = `
         user_id: ID
         concert_id: ID
         attended: Boolean!
+        User: User
+        Concert: Concert
     }
 
     input CreateTicketInput {
@@ -27,4 +29,4 @@ const concertTicketSchema = `
     }
 `;
 
-export default concertTicketSchema
+export default concertTicketSchema;
